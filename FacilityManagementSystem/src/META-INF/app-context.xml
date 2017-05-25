@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>Wiring the dependencies for the Facility Management System.</description>
+
+	<context:component-scan base-package="com" />
+        
+        <!--Domain Package-->
+        <bean id="inspector" class="com.OfficeBuilding.Domain.Inspector" scope="prototype">
+        </bean> 
+        <bean id="requester" class="com.OfficeBuilding.Domain.Requester" scope="prototype">
+        </bean>
+        <bean id="staff" class="com.OfficeBuilding.Domain.Staff" scope="prototype">
+        </bean>
+        
+        <!---Facade Package-->
+        <bean id="facilityMaintenanceConcrete" 
+              class="com.OfficeBuilding.Facade.FacilityMaintenanceConcrete"
+              scope="prototype">
+            <property name="problemOccurences">
+			<map/>
+            </property>
+        </bean>
+        
+        <!--FacilityMaintenance Package-->
+        <bean id="facilityMaintenance" 
+              class="com.OfficeBuilding.FacilityMaintenance.FacilityMaintenance" 
+              scope="prototype">
+            <property name="log" ref="maintenanceLog" />
+           
+            <property name="requestQueue">
+			<list/>
+            </property>
+             <property name="orders">
+			<list/>
+             </property>
+             <property name="schedules">
+			<list/> 
+             </property>
+             <property name="problems">
+			<list/>
+             </property>
+             <property name="problemOccurences">
+			<map/>
+             </property>
+            
+        </bean>
+        <bean id="maintenanceCost" 
+              class="com.OfficeBuilding.FacilityMaintenance.MaintenanceCost" 
+              scope="prototype"/>
+        <bean id="maintenanceLog" 
+              class="com.OfficeBuilding.FacilityMaintenance.MaintenanceLog" 
+              scope="prototype">
+            <property name="orders">
+			<list/>
+            </property>
+        </bean>
+        <bean id="maintenanceOrder" 
+              class="com.OfficeBuilding.FacilityMaintenance.MaintenanceOrder" 
+              scope="prototype">
+            <property name="cost" ref="maintenanceCost" />
+            <property name="request" ref="maintenanceRequest" />
+        </bean>
+        <bean id="maintenanceRequest" 
+              class="com.OfficeBuilding.FacilityMaintenance.MaintenanceRequest" 
+              scope="prototype"/>
+        <bean id="maintenanceSchedule" 
+              class="com.OfficeBuilding.FacilityMaintenance.MaintenanceSchedule" 
+              scope="prototype">
+            <property name="request" ref="maintenanceRequest" />
+        </bean>
+        
+        <!--FacilityUse Package-->
+        <bean id="facilityUse" 
+              class="com.OfficeBuilding.FacilityUse.FacilityUse" 
+              scope="prototype">
+            <property name="users">
+			<list/>
+            </property>
+            
+            
+            
+            
+        </bean>
+        <bean id="facilityUser" 
+              class="com.OfficeBuilding.FacilityUse.FacilityUser" 
+              scope="prototype"/>
+        
+        <!--Inspection Package-->
+        <bean id="facilityInspection" 
+              class="com.OfficeBuilding.Inspection.FacilityInspection" 
+              scope="prototype">
+            <property name="log" ref="inspectionLog" />
+            <property name="forms">
+			<list/>
+            </property>
+                       
+                        
+            
+        </bean> 
+        <bean id="inspectionForm" 
+              class="com.OfficeBuilding.Inspection.InspectionForm" 
+              scope="prototype"/>
+        <bean id="inspectionLog" 
+              class="com.OfficeBuilding.Inspection.InspectionLog" 
+              scope="prototype">
+            
+            <property name="inspections">
+                          <list/>    
+            </property>
+            
+            
+        </bean>
+        
+        <!--Facility Package-->
+        <bean id="building" 
+              class="com.OfficeBuilding.facility.Building" 
+              scope="prototype">
+            <property name="maintenance" ref="facilityMaintenance" />
+            <property name="detail" ref="facilityDetail" />
+            <property name="inspectionLog" ref="inspectionLog" />
+            <property name="facilities">
+                          <list/>   
+            </property>
+            <property name="usage" ref="facilityUse" />
+            <property name="inspection" ref="facilityInspection" />
+        </bean>
+        <bean id="facilityBudget" 
+              class="com.OfficeBuilding.facility.FacilityBudget" 
+              scope="prototype"/>
+        <bean id="facilityDetail" 
+              class="com.OfficeBuilding.facility.FacilityDetail" 
+              scope="prototype">
+            <property name="facilityBudget" ref="facilityBudget" />
+            <property name="address" ref="location" />
+            
+        </bean>
+        <bean id="location" 
+              class="com.OfficeBuilding.facility.Location" 
+              scope="prototype"/>
+        <bean id="unit" 
+              class="com.OfficeBuilding.facility.Unit" 
+              scope="prototype">
+            <property name="detail" ref="facilityDetail" />
+            <property name="maintenance" ref="facilityMaintenance" />
+            <property name="inspection" ref="facilityInspection" />
+            <property name="usage" ref="facilityUse" />
+            <property name="inspectionLog" ref="inspectionLog" />
+            
+        </bean>
+	
+</beans>
